@@ -10,7 +10,14 @@ create table if not exists public.predio_edits (
 );
 
 alter table public.predio_edits enable row level security;
+grant select on public.predio_edits to anon;
 grant select, insert, update on public.predio_edits to authenticated;
+
+-- Lectura publica: el mapa muestra las ediciones sin autenticarse
+drop policy if exists "Public can read edits" on public.predio_edits;
+create policy "Public can read edits"
+  on public.predio_edits for select to anon
+  using (true);
 
 drop policy if exists "Authorized Metamorfosis users can read edits" on public.predio_edits;
 create policy "Authorized Metamorfosis users can read edits"
